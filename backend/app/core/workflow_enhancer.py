@@ -7,6 +7,7 @@ function with minimal code changes required.
 """
 
 import logging
+import uuid
 from typing import Any, Dict, Optional, Union, AsyncGenerator
 from .dynamic_workflow_engine import DynamicWorkflowEngine, DynamicWorkflowContext
 
@@ -34,7 +35,9 @@ class WorkflowExecutionEnhancer:
         """Create dynamic context from request parameters"""
         
         # Generate session_id with fallback logic
-        session_id = req.session_id or req.chatflow_id or f"session_{req.__hash__()}"
+        session_id = getattr(req, "session_id", None) or getattr(req, "chatflow_id", None)
+        if not session_id:
+            session_id = f"session_{uuid.uuid4().hex}"
         if isinstance(session_id, int):
             session_id = str(session_id)
         
