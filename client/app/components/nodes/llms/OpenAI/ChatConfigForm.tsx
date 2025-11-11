@@ -84,8 +84,11 @@ export default function ChatConfigForm({
           <Form className="space-y-8 w-full h-full">
             {/* Credential ID */}
             <div>
-              <label className="text-white text-sm font-medium mb-2 block">
+              {/* <label className="text-white text-sm font-medium mb-2 block">
                 Credential
+              </label> */}
+              <label className="text-white text-sm font-medium mb-2 block">
+                AWS Bedrock Credential
               </label>
               <CredentialSelector
                 value={values.credential_id}
@@ -118,7 +121,8 @@ export default function ChatConfigForm({
                   }
                 }}
                 serviceType="openai"
-                placeholder="Select Credential"
+                // placeholder="Select Credential"
+                placeholder="Select AWS Bedrock credential"
                 showCreateNew={true}
                 className="text-sm text-white px-4 py-3 rounded-lg w-full bg-slate-900/80 border border-gray-600 focus:border-blue-500 focus:ring-1 focus:ring-blue-500"
               />
@@ -131,8 +135,16 @@ export default function ChatConfigForm({
 
             {/* API Key */}
             <div>
-              <label className="text-white text-sm font-medium mb-2 block">
+              {/* <label className="text-white text-sm font-medium mb-2 block">
                 API Key {values.credential_id && <span className="text-gray-400">(optional if using credential)</span>}
+              </label> */}
+              <label className="text-white text-sm font-medium mb-2 block">
+                AWS Bedrock API Key{" "}
+                {values.credential_id && (
+                  <span className="text-gray-400">
+                    (optional if using credential)
+                  </span>
+                )}
               </label>
               <Field
                 name="api_key"
@@ -150,8 +162,11 @@ export default function ChatConfigForm({
 
             {/* Model */}
             <div>
-              <label className="text-white text-sm font-medium mb-2 block">
+              {/* <label className="text-white text-sm font-medium mb-2 block">
                 Model
+              </label> */}
+              <label className="text-white text-sm font-medium mb-2 block">
+                AWS Bedrock Model (OpenAI backend)
               </label>
               <Field
                 as="select"
@@ -160,11 +175,16 @@ export default function ChatConfigForm({
                 onMouseDown={(e: any) => e.stopPropagation()}
                 onTouchStart={(e: any) => e.stopPropagation()}
               >
-                <option value="gpt-4o">GPT-4o ⭐</option>
+                {/* <option value="gpt-4o">GPT-4o ⭐</option>
                 <option value="gpt-4o-mini">GPT-4o Mini</option>
                 <option value="gpt-4-turbo">GPT-4 Turbo</option>
                 <option value="gpt-4">GPT-4</option>
-                <option value="gpt-4-32k">GPT-4 32K</option>
+                <option value="gpt-4-32k">GPT-4 32K</option> */}
+                <option value="gpt-4o">AWS Bedrock · GPT-4o ⭐</option>
+                <option value="gpt-4o-mini">AWS Bedrock · GPT-4o Mini</option>
+                <option value="gpt-4-turbo">AWS Bedrock · GPT-4 Turbo</option>
+                <option value="gpt-4">AWS Bedrock · GPT-4</option>
+                <option value="gpt-4-32k">AWS Bedrock · GPT-4 32K</option>
               </Field>
               <ErrorMessage
                 name="model_name"

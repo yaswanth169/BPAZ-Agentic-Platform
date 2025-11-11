@@ -63,9 +63,14 @@ export default function ChatDisplayNode({
         <div className="absolute inset-0 rounded-2xl bg-gradient-to-br from-white/10 to-transparent opacity-50" />
         <div className="relative z-10 mb-2">
           <div className="relative">
-            <img
+            {/* <img
               src="icons/openai.svg"
               alt="openaiicons"
+              className="w-10 h-10 text-white"
+            /> */}
+            <img
+              src="icons/aws-bedrock.svg"
+              alt="aws bedrock icon"
               className="w-10 h-10 text-white"
             />
             <div className="absolute -top-1 -right-1 w-4 h-4 bg-gradient-to-r from-purple-400 to-indigo-500 rounded-full flex items-center justify-center">
@@ -74,7 +79,8 @@ export default function ChatDisplayNode({
           </div>
         </div>
         <div className="text-white text-xs font-semibold text-center z-10">
-          {data?.displayName || data?.name || "OpenAI Chat"}
+          {/* {data?.displayName || data?.name || "OpenAI Chat"} */}
+          {data?.displayName || data?.name || "AWS Bedrock Chat"}
         </div>
 
         {isHovered && (

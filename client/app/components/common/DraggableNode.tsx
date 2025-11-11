@@ -46,8 +46,11 @@ const nodeTypeIconMap: Record<string, ReactElement> = {
   CohereEmbeddings: (
     <img src="icons/cohere.svg" alt="cohereicons" className="w-20 h-20" />
   ),
+  // OpenAIEmbedder: (
+  //   <img src="icons/openai.svg" alt="openaiicons" className="w-20 h-20" />
+  // ),
   OpenAIEmbedder: (
-    <img src="icons/openai.svg" alt="openaiicons" className="w-20 h-20" />
+    <img src="icons/aws-bedrock.svg" alt="aws bedrock icon" className="w-20 h-20" />
   ),
 
   // 🧠 Memory
@@ -110,23 +113,40 @@ const nodeTypeIconMap: Record<string, ReactElement> = {
   ),
   RetrieverProvider: <Search className="w-6 h-6 text-indigo-400" />,
   RetrieverNode: <Search className="w-6 h-6 text-indigo-400" />,
+  // OpenAIEmbeddingsProvider: (
+  //   <img
+  //     src="icons/openai.svg"
+  //     alt="openaiembeddingsprovidericons"
+  //     className="w-20 h-20"
+  //   />
+  // ),
   OpenAIEmbeddingsProvider: (
     <img
-      src="icons/openai.svg"
-      alt="openaiembeddingsprovidericons"
+      src="icons/aws-bedrock.svg"
+      alt="aws bedrock embeddings icon"
       className="w-20 h-20"
     />
   ),
 
   // ✅ SVG icons
+  // OpenAIChat: (
+  //   <img src="icons/openai.svg" alt="openaichaticons" className="w-20 h-20" />
+  // ),
   OpenAIChat: (
-    <img src="icons/openai.svg" alt="openaichaticons" className="w-20 h-20" />
+    <img src="icons/aws-bedrock.svg" alt="aws bedrock chat icon" className="w-20 h-20" />
   ),
 
+  // OpenAIEmbeddings: (
+  //   <img
+  //     src="icons/openai.svg"
+  //     alt="openaiembeddingsicons"
+  //     className="w-20 h-20"
+  //   />
+  // ),
   OpenAIEmbeddings: (
     <img
-      src="icons/openai.svg"
-      alt="openaiembeddingsicons"
+      src="icons/aws-bedrock.svg"
+      alt="aws bedrock embeddings icon"
       className="w-20 h-20"
     />
   ),

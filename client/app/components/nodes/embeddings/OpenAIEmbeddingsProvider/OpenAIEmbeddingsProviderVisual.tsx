@@ -85,11 +85,18 @@ export default function OpenAIEmbeddingsProviderVisual({
       {/* Main icon */}
       <div className="relative z-10 mb-2">
         <div className="relative">
-          {/* OpenAI logo background circle */}
-          <div className="w-10 h-10 rounded-full flex items-center justify-center">
+          {/* <div className="w-10 h-10 rounded-full flex items-center justify-center">
             <img
               src="icons/openai.svg"
               alt="openaiicons"
+              className="w-10 h-10 text-white"
+            />
+          </div> */}
+          {/* AWS Bedrock logo background circle */}
+          <div className="w-10 h-10 rounded-full flex items-center justify-center">
+            <img
+              src="icons/aws-bedrock.svg"
+              alt="aws bedrock icon"
               className="w-10 h-10 text-white"
             />
           </div>
@@ -102,7 +109,8 @@ export default function OpenAIEmbeddingsProviderVisual({
 
       {/* Node title */}
       <div className="text-white text-xs font-semibold text-center drop-shadow-lg z-10">
-        {data?.displayName || data?.name || "OpenAI"}
+        {/* {data?.displayName || data?.name || "OpenAI"} */}
+        {data?.displayName || data?.name || "AWS Bedrock Embeddings"}
       </div>
 
       {/* Hover effects */}

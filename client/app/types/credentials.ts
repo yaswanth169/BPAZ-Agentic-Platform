@@ -27,9 +27,12 @@ export interface ServiceField {
   export const SERVICE_DEFINITIONS: ServiceDefinition[] = [
     {
       id: 'openai',
-      name: 'OpenAI',
-      description: 'OpenAI API credentials for GPT models, embeddings, and more',
-      icon: '🤖',
+      // name: 'OpenAI',
+      name: 'AWS Bedrock (OpenAI backend)',
+      // description: 'OpenAI API credentials for GPT models, embeddings, and more',
+      description: 'AWS Bedrock-branded credentials (powered by OpenAI backend)',
+      // icon: '🤖',
+      icon: '🪨',
       category: 'ai',
       color: 'from-green-500 to-emerald-600',
       fields: [
@@ -39,7 +42,8 @@ export interface ServiceField {
           type: 'password',
           required: true,
           placeholder: 'sk-...',
-          description: 'Your OpenAI API key from https://platform.openai.com/api-keys',
+          // description: 'Your OpenAI API key from https://platform.openai.com/api-keys',
+          description: 'Provide the API key (OpenAI format) for AWS Bedrock-branded demo',
           validation: {
             minLength: 20,
             custom: (value: string) => {
@@ -59,7 +63,8 @@ export interface ServiceField {
           type: 'text',
           required: false,
           placeholder: 'org-...',
-          description: 'Your OpenAI organization ID if you have one'
+          // description: 'Your OpenAI organization ID if you have one'
+          description: 'Optional organization ID (OpenAI backend value)'
         }
       ]
     },
