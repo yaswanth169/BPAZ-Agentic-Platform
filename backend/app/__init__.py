@@ -1,0 +1,1 @@
+"""BPAZ-Agentic-Platform backend application package."""

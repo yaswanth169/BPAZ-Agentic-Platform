@@ -1,0 +1,19 @@
+version: '3.8'
+
+services:
+  bpaz-widget:
+    build: .
+    ports:
+      - "8080:80"
+    container_name: bpaz-agentic-platform-widget
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 10s
+
+networks:
+  default:
+    name: bpaz-widget-network
