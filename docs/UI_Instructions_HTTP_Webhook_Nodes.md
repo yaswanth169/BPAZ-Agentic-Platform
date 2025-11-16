@@ -1,6 +1,6 @@
 # Create a Markdown interview prep pack for download
 content = r"""
-# AI Systems Engineer (No-Code + Agents + Automation) — Interview Package (kitUP)
+# AI Systems Engineer (No-Code + Agents + Automation) — Interview Package
 
 **Prepared by:** Quick study set customized according to your experiences  
 **Scope:** 20 technical Q&A + 10 scenarios + 10 culture/soft-skill + opening speech, demo plan, metrics, checklist  
@@ -9,8 +9,8 @@ content = r"""
 ---
 
 ## 0) 120-second opening speech (script)
-"Hello, I'm Baha. I'm currently working as an AI Engineer intern at Kafein Technology; I develop **agents and automation** with **LangChain/LangGraph, FastMCP, n8n**, Zapier/Make and **Supabase PGVector** based RAG systems. Most recently, I built a CV search assistant based on **vector search + reranking** for HR and several **async agents** working in Slack. I love transforming difficult problems into quick MVPs, moving them to production in the shortest way by **blending no-code with code**.  
-What interests me at kitUP is the freedom to **map operational problems** and design end-to-end solutions: APIs, webhooks, data model, automation flow, observability and iteration. My approach: **impact-focused**, measurable and simple solutions; avoiding unnecessary complexity. In short, I don't just write 'chat' and leave; I build **systems that work**."
+"Hello, I’m an AI engineer focused on building **agents and automation** with tools like **LangChain/LangGraph, FastMCP, n8n**, Zapier/Make and **Supabase PGVector**‑based RAG systems. Recently, I built a CV search assistant using **vector search + reranking** for HR and several **async agents** that operate inside Slack. I like turning difficult problems into quick MVPs and moving them to production fast by **blending no‑code with code**.  
+What motivates me is having the freedom to **map operational problems** and design end‑to‑end solutions: APIs, webhooks, data models, automation flows, observability and iteration. My approach is **impact‑focused**, measurable and as simple as possible; I avoid unnecessary complexity. In short, I don’t just build a chat interface and walk away; I build **systems that work**."
 
 ---
 
@@ -230,7 +230,7 @@ I look at ICE/RICE balance; the smallest flow that makes the fastest impact come
 - [ ] Prompt & tool **schemas** at hand (copy-paste)  
 - [ ] Token/cost and latency **visible** (log + example)  
 - [ ] At least **1 failure** story and inference ready  
-- [ ] Memorized **2 original sentences** for "Why kitUP?"
+- [ ] Memorized **2 original sentences** about why you want this role
 
 ---
 
@@ -248,7 +248,7 @@ I look at ICE/RICE balance; the smallest flow that makes the fastest impact come
 "I put agents and automations into real use by **embedding them in business workflows**. I set up jobs like RAG + PGVector, Slack triage, Stripe reports **within the day** and make them measurable within a week. Documentation, observability and auditability are standard for me. That's why I deliver **[target X]** in the first 30 days, **[target Y]** in 90 days."
 
 """
-with open("/mnt/data/kitup_interview_prep.md", "w", encoding="utf-8") as f:
+with open("/mnt/data/ai_systems_interview_prep.md", "w", encoding="utf-8") as f:
     f.write(content)
 
-"/mnt/data/kitup_interview_prep.md"
+"/mnt/data/ai_systems_interview_prep.md"

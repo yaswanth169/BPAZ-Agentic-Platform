@@ -185,7 +185,7 @@ async def handle_webhook_request(
                                     "id": "http_1", 
                                     "type": "HttpRequest",
                                     "data": {
-                                        "url": "https://www.bahakizil.com",
+                                        "url": "https://example.com",
                                         "method": "GET",
                                         "headers": '{"User-Agent": "Mozilla/5.0 (compatible; BPAZ-Agentic-Platform-Webhook/1.0)"}',
                                         "timeout": 30
