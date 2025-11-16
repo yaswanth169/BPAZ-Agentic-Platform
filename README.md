@@ -1,103 +1,89 @@
 # BPAZ-Agentic-Platform
 
-**Build AI Agents & Workflows, Visually — Python backend • React frontend • PostgreSQL**
+**Visual Agentic Workflows with FastAPI, React, and PostgreSQL**
 
+BPAZ-Agentic-Platform is a full-stack system for building and running AI agents and workflows.  
+It provides:
+- A **Python FastAPI** backend for orchestration and API.
+- A **React (Vite + React Router)** frontend for visual workflow building.
+- A **PostgreSQL** database for persistence (workflows, executions, credentials, memory).
 
-BPAZ-Agentic-Platform is an open‑source, Flowise‑like visual workflow builder. It ships with a **Python FastAPI** backend, a **React (Vite)** frontend, and a **PostgreSQL** database. You can self‑host locally with Docker or run a classic dev stack (Python venv + Node + Postgres).
-
----
-
-## 🎬 Showcase
-
-<!-- Inline demo video (GitHub renders HTML) -->
-
-<p>
-  <img src="./demo.gif" alt="BPAZ-Agentic-Platform Demo" width="100%" />
-</p>
-
-<!-- Screenshot -->
-
-<p>
-  <img src="https://github.com/kafein-product-space/BPAZ-Agentic-Platform/blob/readme/demo.png?raw=1" alt="BPAZ-Agentic-Platform Demo" width="100%" />
-</p>
-
----
-
-### 🔗 Quick Links
-
-* **Website (Preview)**: [https://bpaz-agentic-platform-blond.vercel.app](https://bpaz-agentic-platform-blond.vercel.app)
-* **API Docs (local)**: [http://localhost:8000/docs](http://localhost:8000/docs) (FastAPI Swagger UI)
-* **Star / Fork**: [https://github.com/kafein-product-space/BPAZ-Agentic-Platform](https://github.com/kafein-product-space/BPAZ-Agentic-Platform)
+This README gives a clean, practical overview of how to set up and understand the project.  
+For deep-dive docs, see `docs/architecture-overview.md`, `docs/frontend-overview.md`, and `docs/backend-overview.md`.
 
 ---
 
 ## 📚 Table of Contents
 
-* ⚡ Quick Start (TL;DR)
-* 🐘 PostgreSQL (Docker)
-* 🔐 Environment Variables
-
-  * Backend **migrations** `.env`
-  * Backend runtime `.env`
-  * Frontend `.env`
-* 🧪 Local Development (Python venv / Conda)
-* 🧭 VS Code Debugging (`.vscode/launch.json`)
-* 🐳 Docker (Compose & Images)
-* 🧱 Project Structure
-* ✨ App Overview (What you can build)
-* 📊 Repository Stats (⭐ Stars & ⬇️ Downloads)
-* 🙌 Contributing (with user icons)
-* 🆘 Troubleshooting
-* 🤝 Code of Conduct
-* 📝 License
+- **What You Can Build**
+- **Architecture Overview**
+- **Quick Start (Local Dev)**
+- **Environment Variables**
+- **Running Backend & Frontend**
+- **Docker / Docker Compose**
+- **Project Structure**
+- **Where to Learn More**
 
 ---
 
-## ⚡ Quick Start (TL;DR)
+## ✨ What You Can Build
+
+- **Visual AI workflows**  
+  Drag-and-drop nodes (LLMs, tools, retrievers, memory, agents, triggers) onto a canvas and connect them into end-to-end pipelines.
+
+- **Agentic behaviors**  
+  Use React-style agents (Reason + Act) that call tools like retrievers, HTTP clients, and vector stores.
+
+- **RAG pipelines**  
+  Build Retrieval-Augmented Generation flows with document loaders, splitters, embeddings, and vector stores.
+
+- **Persistent executions and chat**  
+  Store workflows, executions, chat history, and memory in PostgreSQL; inspect past runs and replay them.
+
+- **API-first backend**  
+  Use the REST API under `/api/v1` (with Swagger UI at `/docs`) to integrate workflows into other systems.
+
+---
+
+## 🏗 Architecture Overview
+
+At a high level:
+
+- **Frontend (`client/`)**
+  - React + Vite app with React Router v7.
+  - Workflow canvas powered by `@xyflow/react` (React Flow).
+  - Zustand stores for state, Axios/fetch-based `api-client` for backend calls.
+  - See `docs/frontend-overview.md` for a full file-by-file explanation and UX flowcharts.
+
+- **Backend (`backend/`)**
+  - FastAPI application exposing REST endpoints for workflows, executions, chat, variables, credentials, etc.
+  - Core engine (`core/engine_v2.py`, `core/dynamic_node_analyzer.py`, `core/execution_queue.py`) executes workflows as graphs of nodes.
+  - Nodes in `app/nodes/` implement LLMs, tools, retrievers, memory, triggers, and more using LangChain.
+  - See `docs/backend-overview.md` for an end-to-end description of the backend.
+
+- **Database (PostgreSQL)**
+  - Stores users, organizations, workflows, executions, credentials, and vector store data.
+  - Migrations and bootstrap logic live in `backend/migrations/database_setup.py`.
+  - See `docs/database-and-deployment.md` for DB and deployment details.
+
+- **Embedded Chat Widget (`widget/`)**
+  - A lightweight, embeddable chat widget (HTML + JS) that connects to the backend’s chat/workflow APIs.
+  - Includes its own `Dockerfile` and `docker-compose.yml` for running the widget as a separate service.
+  - See `widget/README.md` for usage, configuration, and how to embed it into external websites.
+
+For a system-level picture and request flow, read `docs/architecture-overview.md`.
+
+---
+
+## ⚡ Quick Start (Local Development)
 
 **Prerequisites**
 
-* **Python** ≥ 3.10
-* **Node.js** ≥ 18.15 (Vite)
-* **Docker** & **Docker Compose**
+- **Python** ≥ 3.10
+- **Node.js** ≥ 18.15
+- **Docker** and **Docker Compose**
 
-```bash
-# 1) Start Postgres 15 in Docker (change values if you like)
-docker run --name bpaz \
-  -e POSTGRES_DB=bpaz \
-  -e POSTGRES_USER=bpaz \
-  -e POSTGRES_PASSWORD=bpaz \
-  -p 5432:5432 -d postgres:15
-
-# 2) Create env files (see sections below for full content)
-#    - backend/migrations/.env
-#    - backend/.env
-
-# 3) Create virtual environment & install backend deps
-python -m venv .venv && source .venv/bin/activate   # Windows: .venv\\Scripts\\activate
-pip install -r backend/requirements.txt
-
-# 4) Initialize DB schema (runs inside your local machine)
-python backend/migrations/database_setup.py
-
-# 5) Run backend (choose one)
-# a) VS Code debug (recommended) — see launch.json section below
-# b) Or direct
-python backend/app.py
-
-# 6) Frontend
-# create client/.env as shown below
-cd client && npm install && npm run dev
-# Open the printed Vite URL (e.g. http://localhost:5173)
-```
-
-> **Tip:** Replace all `bpaz` defaults (DB name/user/password) for your own environment in production.
-
----
-
-## 🐘 PostgreSQL (Docker)
-
-Run a local Postgres 15 instance. Feel free to change container name/ports.
+### 1. Start PostgreSQL in Docker
 
 ```bash
 docker run --name bpaz \
@@ -107,21 +93,9 @@ docker run --name bpaz \
   -p 5432:5432 -d postgres:15
 ```
 
-* Container: `bpaz`
-* Host port: `5432` → Container port: `5432`
-* Default DB: `bpaz` (change if you want)
+### 2. Create environment files
 
----
-
-## 🔐 Environment Variables
-
-BPAZ-Agentic-Platform uses **two backend `.env` files** and **one frontend `.env`**.
-
-> **Path note:** In your editor, `${workspaceFolder}` refers to the repository root.
-
-### 1) Backend **migrations** `.env`
-
-Create: `backend/migrations/.env`
+Create `backend/migrations/.env`:
 
 ```dotenv
 ASYNC_DATABASE_URL=postgresql+asyncpg://bpaz:bpaz@localhost:5432/bpaz
@@ -129,9 +103,7 @@ DATABASE_URL=postgresql://bpaz:bpaz@localhost:5432/bpaz
 CREATE_DATABASE=true
 ```
 
-### 2) Backend runtime `.env`
-
-Create: `backend/.env`
+Create `backend/.env`:
 
 ```dotenv
 ASYNC_DATABASE_URL=postgresql+asyncpg://bpaz:bpaz@localhost:5432/bpaz
@@ -140,7 +112,7 @@ CREATE_DATABASE=false
 POSTGRES_DB=bpaz
 POSTGRES_PASSWORD=bpaz
 
-# LangSmith / LangChain tracing (optional but recommended for debugging)
+# Optional LangChain / LangSmith tracing
 LANGCHAIN_TRACING_V2=true
 LANGCHAIN_API_KEY=your_langchain_api_key
 LANGCHAIN_PROJECT=bpaz-agentic-platform-workflows
@@ -150,107 +122,83 @@ TRACE_MEMORY_OPERATIONS=true
 TRACE_AGENT_REASONING=true
 ```
 
-### 3) Frontend `.env`
-
-Create: `client/.env`
+Create `client/.env`:
 
 ```dotenv
-# Frontend env
 VITE_API_BASE_URL=http://localhost:8000
 VITE_API_VERSION=/api/v1
 VITE_NODE_ENV=development
 VITE_ENABLE_LOGGING=true
 ```
 
----
-
-## 🧪 Local Development (Python venv / Conda)
-
-You can use **venv** or **conda**. Below are both options.
-
-### Option A — venv (recommended for simplicity)
+### 3. Install backend dependencies and initialize DB
 
 ```bash
 python -m venv .venv
 # macOS/Linux
 source .venv/bin/activate
-# Windows (PowerShell)
-.venv\\Scripts\\Activate.ps1
+# Windows PowerShell
+.venv\Scripts\Activate.ps1
 
 pip install --upgrade pip
 pip install -r backend/requirements.txt
-```
 
-### Option B — Conda
-
-```bash
-conda create -n bpaz-agentic-platform python=3.10 -y
-conda activate bpaz-agentic-platform
-pip install -r backend/requirements.txt
-```
-
-### Initialize the Database Schema
-
-Ensure your Postgres container is running, then:
-
-```bash
+# Initialize schema (uses backend/migrations/.env)
 python backend/migrations/database_setup.py
 ```
 
-### Run the Backend
+### 4. Run the backend
 
-* **Via VS Code Debugger** (see next section), or
-* **Directly**: `python backend/app.py`
+```bash
+python backend/app.py
+```
 
-### Run the Frontend
+The API should be available at:
+- `http://localhost:8000` (API)
+- `http://localhost:8000/docs` (FastAPI Swagger UI)
+
+### 5. Run the frontend
 
 ```bash
 cd client
 npm install
 npm run dev
-# Open the printed Vite URL (e.g. http://localhost:5173)
 ```
+
+Open the printed Vite URL (commonly `http://localhost:5173`).
 
 ---
 
-## 🧭 VS Code Debugging (`.vscode/launch.json`)
+## 🔐 Environment Variables (Summary)
 
-Create the folder: `.vscode/` at the repository root and add `launch.json`:
+You typically manage three `.env` files:
 
-```json
-{
-  "version": "0.2.0",
-  "configurations": [
-    {
-      "name": "Python: Backend Main",
-      "type": "python",
-      "request": "launch",
-      "program": "${workspaceFolder}/backend/app.py",
-      "console": "integratedTerminal",
-      "env": { "DOTENV_PATH": "${workspaceFolder}/backend/.env" }
-    }
-  ]
-}
-```
+- **`backend/migrations/.env`**  
+  Used by migration/bootstrap script to connect to Postgres and create schema.
 
-> If you use the VS Code Python extension’s `envFile` feature instead, you can set `"envFile": "${workspaceFolder}/backend/.env"`.
+- **`backend/.env`**  
+  Used by the FastAPI app at runtime for DB URLs and optional tracing.
+
+- **`client/.env`**  
+  Frontend build-time config: backend base URL, API version, logging flags.
+
+More details and recommended values are documented in `docs/database-and-deployment.md`.
 
 ---
 
-## 🐳 Docker
+## 🐳 Docker & Docker Compose
 
-### Docker Compose (recommended)
+### Using docker-compose (recommended)
 
-If your repo includes a `docker-compose.yml` at the root, simply run:
+From the repository root:
 
 ```bash
 docker compose up -d
 ```
 
-Then open the printed URLs:
-
-* Frontend: e.g. [http://localhost:5173](http://localhost:5173) or [http://localhost:3000](http://localhost:3000)
-* Backend: [http://localhost:8000](http://localhost:8000) (Swagger: `/docs`)
+Then open:
+- Frontend: usually `http://localhost:5173` or `http://localhost:3000`
+- Backend: `http://localhost:8000` (`/docs` for Swagger)
 
 Stop containers:
 
@@ -258,133 +206,64 @@ Stop containers:
 docker compose stop
 ```
 
-### Build & Run Images Manually
+### Building and running images manually
 
 ```bash
 # Build the app image from the project root
 docker build --no-cache -t bpaz-agentic-platform:latest .
 
-# Run (example for backend image; adjust ports/envs to your Dockerfile)
+# Run backend container (adjust ports/envs if needed)
 docker run -d --name bpaz-agentic-platform \
   -p 8000:8000 \
   --env-file backend/.env \
   bpaz-agentic-platform:latest
 ```
 
+For the frontend, you can build and serve the `client` app in a similar containerized setup if desired.
+
 ---
 
 ## 🧱 Project Structure
 
-```
+```text
 BPAZ-Agentic-Platform/
 ├─ backend/
-│  ├─ app.py                # FastAPI entrypoint
-│  ├─ requirements.txt
-│  ├─ .env                  # Backend runtime env
-│  └─ migrations/
-│     ├─ database_setup.py  # Initializes DB schema
-│     └─ .env               # Migrations env
+│  ├─ app.py                    # FastAPI entrypoint
+│  ├─ app/                      # Backend modules (API, core engine, nodes, models, middleware)
+│  ├─ migrations/
+│  │  ├─ database_setup.py      # DB bootstrap / migrations
+│  │  └─ .env                   # Migrations env
+│  ├─ test/                     # Backend tests
+│  └─ requirements.txt
 ├─ client/
-│  ├─ src/
-│  ├─ index.html
-│  └─ .env                  # Frontend env
-├─ docker/                  # (Optional) Docker files
-├─ .vscode/
-│  └─ launch.json
+│  ├─ app/                      # Frontend React app (routes, components, stores, services)
+│  ├─ public/                   # Static assets
+│  ├─ package.json
+│  └─ .env                      # Frontend env
+├─ widget/
+│  ├─ index.html                # Standalone chat widget HTML shell
+│  ├─ widget.js                 # Widget logic (UI + integration with backend chat APIs)
+│  ├─ Dockerfile                # Container image for the widget
+│  ├─ docker-compose.yml        # Optional compose file for running widget service
+│  └─ README.md                 # Widget-specific documentation and setup
+├─ docs/
+│  ├─ architecture-overview.md  # System-level architecture & flows
+│  ├─ frontend-overview.md      # Full frontend file-by-file explanation
+│  ├─ backend-overview.md       # Backend modules and engine overview
+│  └─ database-and-deployment.md# DB and deployment details
+├─ docker-compose.yml
+├─ Dockerfile                   # Root Docker build
+└─ README.md
 ```
 
 ---
 
-## ✨ App Overview (What you can build)
+## 📘 Where to Learn More
 
-* **Visual AI Workflows**: Drag‑and‑drop nodes (LLM, tools, retrievers, memory, agents). Wire inputs/outputs, set parameters, and persist runs.
-* **Observability**: Toggle **LangChain/LangSmith** tracing using the env flags provided (great for debugging prompts and tool calls).
-* **PostgreSQL Persistence**: Store workflows, runs, artifacts, and user data in Postgres.
-* **REST API**: The backend exposes API routes under `/api/v1` (see Swagger UI at `/docs`).
+- **System architecture**: `docs/architecture-overview.md`
+- **Frontend details**: `docs/frontend-overview.md`
+- **Backend details**: `docs/backend-overview.md`
+- **Database & deployment**: `docs/database-and-deployment.md`
 
----
+Those documents are designed to give you a clear mental model of how every part of BPAZ-Agentic-Platform fits together and how requests and data flow through the system.
 
-## 📊 Repository Stats (⭐ Stars & ⬇️ Downloads)
-
-### ⭐ Star History (auto‑updated)
-
-[![Star History Chart](https://api.star-history.com/svg?repos=kafein-product-space/BPAZ-Agentic-Platform\&type=Date)](https://star-history.com/#kafein-product-space/BPAZ-Agentic-Platform)
-
-### ⬇️ Downloads — Badges & Table
-
-| Metric                   | Badge                                                                                                                                      |
-| ------------------------ | ------------------------------------------------------------------------------------------------------------------------------------------ |
-| **All releases (total)** | ![All Downloads](https://img.shields.io/github/downloads/kafein-product-space/BPAZ-Agentic-Platform/total?label=All%20downloads)                      |
-| **Latest release**       | ![Latest Release Downloads](https://img.shields.io/github/downloads/kafein-product-space/BPAZ-Agentic-Platform/latest/total?label=Latest%20downloads) |
-| **Stars (live)**         | ![GitHub Repo stars](https://img.shields.io/github/stars/kafein-product-space/BPAZ-Agentic-Platform?style=social)                                     |
-| **Forks (live)**         | ![GitHub forks](https://img.shields.io/github/forks/kafein-product-space/BPAZ-Agentic-Platform?style=social)                                          |
-
-
-## 🙌 Contributing (with user icons)
-
-We welcome PRs! Please:
-
-1. Open an issue describing the change/bug.
-2. Fork → create a feature branch.
-3. Add/adjust tests where applicable.
-4. Open a PR with a clear description and screenshots/GIFs.
-
-### 👥 Contributors 
-
-<a href="https://github.com/kafein-product-space/BPAZ-Agentic-Platform/graphs/contributors">
-  <img src="https://contrib.rocks/image?repo=kafein-product-space/BPAZ-Agentic-Platform" alt="Contributors" />
-</a>
-
-### ⭐ Stargazers & 🍴 Forkers
-
-[![Stargazers repo roster for @kafein-product-space/BPAZ-Agentic-Platform](https://reporoster.com/stars/kafein-product-space/BPAZ-Agentic-Platform)](https://github.com/kafein-product-space/BPAZ-Agentic-Platform/stargazers)
-[![Forkers repo roster for @kafein-product-space/BPAZ-Agentic-Platform](https://reporoster.com/forks/kafein-product-space/BPAZ-Agentic-Platform)](https://github.com/kafein-product-space/BPAZ-Agentic-Platform/network/members)
-
----
-
-## 🆘 Troubleshooting
-
-**Port 5432 already in use**
-
-* Stop any existing Postgres: `docker ps`, then `docker stop <container>`
-* Or change the host port mapping: `-p 5433:5432`
-
-**Cannot connect to Postgres**
-
-* Verify envs in both `backend/.env` and `backend/migrations/.env`
-* Ensure container is healthy: `docker logs bpaz`
-
-**Migrations didn’t run / tables missing**
-
-* Re-run: `python backend/migrations/database_setup.py`
-* Ensure `CREATE_DATABASE=true` in **migrations** `.env` (and `false` in runtime `.env`)
-
-**Frontend cannot reach backend**
-
-* Check `client/.env` → `VITE_API_BASE_URL=http://localhost:8000`
-* CORS: ensure backend CORS is configured for your dev origin
-
-**VS Code doesn’t load env**
-
-* Using our snippet? Make sure your app reads `DOTENV_PATH`
-* Alternative: VS Code `"envFile": "${workspaceFolder}/backend/.env"`
-
----
-
-## 🤝 Code of Conduct
-
-Please follow our [Contributor Covenant Code of Conduct](./CODE_OF_CONDUCT.md) to keep the community welcoming.
-
----
-
-## 📝 License
-
-Source code is available under the **Apache License 2.0** (see `LICENSE`).
-
----
-
-### ℹ️ Repo Meta (auto‑generated by GitHub)
-
-* Stars, watchers, forks: via badges above
-* Contributors facepile: auto‑updated via contrib.rocks
-* Star history: auto‑updated via star‑history.com
